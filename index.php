@@ -12,7 +12,7 @@ include("acp/inc/config.php");
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="FiveM Webmanager by Slluxx">
     <meta name="author" content="Slluxx">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="acp/assets/images/favicon.png">
     <title><?php echo $websiteTitle; ?></title>
     <!-- Bootstrap Core CSS -->
     <link href="acp/assets/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -23,6 +23,25 @@ include("acp/inc/config.php");
     <!-- Custom CSS -->
     <link href="acp/assets/css/style.css" rel="stylesheet">
 	<script src="acp/assets/js/hexconvert.js"></script>
+
+    <style>
+        .status-box {
+            width: inherit;
+            height: 125px;
+            text-align: center;
+            color: white;
+            padding-top: 40px;
+        }
+        .status-box * {
+            font-size: 24px!important;
+        }
+        .status-offline {
+            background-color: #f96262;
+        }
+        .status-online {
+            background-color: #6ac34a;
+        }
+    </style>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -39,8 +58,9 @@ include("acp/inc/config.php");
 		//echo $server;
 		$url = "http://".$server["ip"].":".$server["port"]."/players.json";
 		$json = @file_get_contents($url); // this WILL do an http request for you
-		// if($json === FALSE ){ echo "<script type='text/javascript'>alert('".$server["name"]." might be down or hard to reach.')</script>";}
-		$data = json_decode($json);
+        // if($json === FALSE ){ echo "<script type='text/javascript'>alert('".$server["name"]." might be down or hard to reach.')</script>";}
+        $data = json_decode($json);
+        if ($json === FALSE){$data=NULL;}
 		$server["players"] = $data;
 	}
 ?>
@@ -111,6 +131,13 @@ include("acp/inc/config.php");
 								
 								var whitebox = document.createElement("div");
 								whitebox.className = "white-box";
+
+                                var statusbox = document.createElement("div");
+                                var serverstatus = servers[server].players === null;
+                                statusbox.classList.add("status-box");
+                                statusbox.classList.add(serverstatus ? "status-offline" : "status-online");
+                                statusbox.classList.add("panel-heading")
+                                statusbox.innerHTML = "<span class='panel-title text-center'>"+ (serverstatus ? "Offline" : "Online") + "</span>";
 								
 								var title = document.createElement("h3");
 								title.innerHTML = servers[server].name;
@@ -133,6 +160,7 @@ include("acp/inc/config.php");
 								whitebox.appendChild(tablediv);
 								
 								container = document.getElementById("container");
+                                container.appendChild(statusbox);
 								container.appendChild(whitebox);
 								
 								// redefine table to add body
