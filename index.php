@@ -22,7 +22,7 @@ include("acp/inc/config.php");
     <!-- <link href="assets/bower_components/morrisjs/morris.css" rel="stylesheet"> -->
     <!-- Custom CSS -->
     <link href="acp/assets/css/style.css" rel="stylesheet">
-	<script src="acp/assets/js/hexconvert.js"></script>
+    <script src="acp/assets/js/hexconvert.js"></script>
 
     <style>
         .status-box {
@@ -52,17 +52,17 @@ include("acp/inc/config.php");
 
 
 <?php
-	  
-	ini_set('default_socket_timeout', $timeoutAfterSeconds);
-	foreach ($servers as &$server) {
-		//echo $server;
-		$url = "http://".$server["ip"].":".$server["port"]."/players.json";
-		$json = @file_get_contents($url); // this WILL do an http request for you
+      
+    ini_set('default_socket_timeout', $timeoutAfterSeconds);
+    foreach ($servers as &$server) {
+        //echo $server;
+        $url = "http://".$server["ip"].":".$server["port"]."/players.json";
+        $json = @file_get_contents($url); // this WILL do an http request for you
         // if($json === FALSE ){ echo "<script type='text/javascript'>alert('".$server["name"]." might be down or hard to reach.')</script>";}
         $data = json_decode($json);
         if ($json === FALSE){$data=NULL;}
-		$server["players"] = $data;
-	}
+        $server["players"] = $data;
+    }
 ?>
 
 <body>
@@ -72,7 +72,7 @@ include("acp/inc/config.php");
     </div>
     <div id="wrapper">
         <!-- Navigation -->
-		       <nav class="navbar navbar-default navbar-static-top" style="margin-bottom: 0">
+               <nav class="navbar navbar-default navbar-static-top" style="margin-bottom: 0">
             <div class="navbar-header"> <a class="navbar-toggle hidden-sm hidden-md hidden-lg " href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"><i class="ti-menu"></i></a>
                 <div class="top-left-part"><a class="logo" href="index.php"><i class="glyphicon glyphicon-fire"></i>&nbsp;<span class="hidden-xs"><?php echo $websiteTitle; ?></span></a></div>
                 <ul class="nav navbar-top-links navbar-left hidden-xs">
@@ -86,18 +86,18 @@ include("acp/inc/config.php");
         <div class="navbar-default sidebar nicescroll" role="navigation">
             <div class="sidebar-nav navbar-collapse ">
                 <ul class="nav" id="side-menu">
-				
-				
-				
-				
-					<!-- https://themify.me/themify-icons -->
+                
+                
+                
+                
+                    <!-- https://themify.me/themify-icons -->
                     <li><a href="index.php" class="waves-effect"><i class="ti-user fa-fw"></i> Playerlist</a></li>
-					<li><a href="acp/index.php" class="waves-effect"><i class="ti-lock fa-fw"></i> ACP login</a></li>
-					
-					
-					
-					
-					
+                    <li><a href="acp/index.php" class="waves-effect"><i class="ti-lock fa-fw"></i> ACP login</a></li>
+                    
+                    
+                    
+                    
+                    
                 </ul>
             </div>
             <!-- /.sidebar-collapse -->
@@ -117,20 +117,20 @@ include("acp/inc/config.php");
                 <!-- row -->
                 <div class="row">
                     <div class="col-sm-12" id="container">
-					
-						<script type="text/javascript">
-							var servers = <?php echo json_encode($servers) ?>;
-							var groups = <?php echo json_encode($groups) ?>;
-							
-							var container = "";
-							console.log(servers);
-							console.log(groups);
-							
-							for (var server in servers) {
-								// skip loop if the property is from prototype
-								
-								var whitebox = document.createElement("div");
-								whitebox.className = "white-box";
+                    
+                        <script type="text/javascript">
+                            var servers = <?php echo json_encode($servers) ?>;
+                            var groups = <?php echo json_encode($groups) ?>;
+                            
+                            var container = "";
+                            console.log(servers);
+                            console.log(groups);
+                            
+                            for (var server in servers) {
+                                // skip loop if the property is from prototype
+                                
+                                var whitebox = document.createElement("div");
+                                whitebox.className = "white-box";
 
                                 var statusbox = document.createElement("div");
                                 var serverstatus = servers[server].players === null;
@@ -138,74 +138,74 @@ include("acp/inc/config.php");
                                 statusbox.classList.add(serverstatus ? "status-offline" : "status-online");
                                 statusbox.classList.add("panel-heading")
                                 statusbox.innerHTML = "<span class='panel-title text-center'>"+ (serverstatus ? "Offline" : "Online") + "</span>";
-								
-								var title = document.createElement("h3");
-								title.innerHTML = servers[server].name;
-								
-								var tablediv = document.createElement("div");
-								tablediv.className = "table-responsive table-sm";
-								
-								var table = document.createElement("table");
-								table.className = "table table-sm";
-								table.id = servers[server].name;
-								
-								var tablehead = document.createElement("thead");
-								var tablehead_tr = document.createElement("tr");
-								tablehead_tr.innerHTML = "<th width='10%' >ID</th><th width='25%' >Name</th><th width='15%' >Ping</th>";
-								
-								tablehead.appendChild(tablehead_tr);
-								table.appendChild(tablehead);
-								tablediv.appendChild(table);
-								whitebox.appendChild(title);
-								whitebox.appendChild(tablediv);
-								
-								container = document.getElementById("container");
+                                
+                                var title = document.createElement("h3");
+                                title.innerHTML = servers[server].name;
+                                
+                                var tablediv = document.createElement("div");
+                                tablediv.className = "table-responsive table-sm";
+                                
+                                var table = document.createElement("table");
+                                table.className = "table table-sm";
+                                table.id = servers[server].name;
+                                
+                                var tablehead = document.createElement("thead");
+                                var tablehead_tr = document.createElement("tr");
+                                tablehead_tr.innerHTML = "<th width='10%' >ID</th><th width='25%' >Name</th><th width='15%' >Ping</th>";
+                                
+                                tablehead.appendChild(tablehead_tr);
+                                table.appendChild(tablehead);
+                                tablediv.appendChild(table);
+                                whitebox.appendChild(title);
+                                whitebox.appendChild(tablediv);
+                                
+                                container = document.getElementById("container");
                                 container.appendChild(statusbox);
-								container.appendChild(whitebox);
-								
-								// redefine table to add body
-								table = document.getElementById(servers[server].name);
-								var tablebody = document.createElement("tbody");
-								table.appendChild(tablebody);
-								var tbody = document.getElementById(servers[server].name).childNodes[1];
-								
-								// now insert players					
-								for (var player in servers[server].players) {
-									var tag = "";
-									
-									var tr = document.createElement("tr");
-									var identifiers = servers[server].players[player].identifiers[0];
-									var identifiers_org = servers[server].players[player].identifiers[0];
-									if (identifiers.indexOf("steam:") >= 0) {
-										identifiers = identifiers.replace("steam:", "");
-										identifiers = hexToDec(identifiers)
-										identifiers_realsteam = "steam:" + identifiers;
-										
-										for (var group in groups) {
-											for (var member in groups[group].members) {
-												if (groups[group].members[member].steam == identifiers_realsteam) {
-													tag = "<span class='" + groups[group].class + "'>[" + groups[group].name + "]</span>";
-													
-												}
-											}
-										}
-										
-										identifiers = identifiers_org + " <a href='https://steamcommunity.com/profiles/" + identifiers + "'>(Profile)</a>";
-									} else {
-										var identifiers = servers[server].players[player].identifiers[0];
-									}
+                                container.appendChild(whitebox);
+                                
+                                // redefine table to add body
+                                table = document.getElementById(servers[server].name);
+                                var tablebody = document.createElement("tbody");
+                                table.appendChild(tablebody);
+                                var tbody = document.getElementById(servers[server].name).childNodes[1];
+                                
+                                // now insert players                    
+                                for (var player in servers[server].players) {
+                                    var tag = "";
+                                    
+                                    var tr = document.createElement("tr");
+                                    var identifiers = servers[server].players[player].identifiers[0];
+                                    var identifiers_org = servers[server].players[player].identifiers[0];
+                                    if (identifiers.indexOf("steam:") >= 0) {
+                                        identifiers = identifiers.replace("steam:", "");
+                                        identifiers = hexToDec(identifiers)
+                                        identifiers_realsteam = "steam:" + identifiers;
+                                        
+                                        for (var group in groups) {
+                                            for (var member in groups[group].members) {
+                                                if (groups[group].members[member].steam == identifiers_realsteam) {
+                                                    tag = "<span class='" + groups[group].class + "'>[" + groups[group].name + "]</span>";
+                                                    
+                                                }
+                                            }
+                                        }
+                                        
+                                        identifiers = identifiers_org + " <a href='https://steamcommunity.com/profiles/" + identifiers + "'>(Profile)</a>";
+                                    } else {
+                                        var identifiers = servers[server].players[player].identifiers[0];
+                                    }
 
-									
-									var s_p_id 		= "<td width='15%' >" + servers[server].players[player].id + "</td>";
-									var s_p_name 	= "<td width='30%' >" + servers[server].players[player].name + "  " + tag + "</td>";
-									var s_p_ping	= "<td width='15%' >" + servers[server].players[player].ping + "</td>";
-									tr.innerHTML 	= s_p_id + s_p_name + s_p_ping;
-									tbody.appendChild(tr);
-									
-									group = "";
-								}				
-							}
-						</script>
+                                    
+                                    var s_p_id         = "<td width='15%' >" + servers[server].players[player].id + "</td>";
+                                    var s_p_name     = "<td width='30%' >" + servers[server].players[player].name + "  " + tag + "</td>";
+                                    var s_p_ping    = "<td width='15%' >" + servers[server].players[player].ping + "</td>";
+                                    tr.innerHTML     = s_p_id + s_p_name + s_p_ping;
+                                    tbody.appendChild(tr);
+                                    
+                                    group = "";
+                                }                
+                            }
+                        </script>
                     </div>
                 </div>
             </div>
